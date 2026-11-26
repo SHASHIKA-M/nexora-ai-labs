@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Atlas Weekender Tote">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e3e0d6"/><stop offset="1" stop-color="#94a08a" stop-opacity=".35"/>
+    </linearGradient>
+    <radialGradient id="v" cx="50%" cy="42%" r="70%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".14"/><stop offset="1" stop-color="#000000" stop-opacity=".28"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#g)"/>
+  <circle cx="150" cy="133" r="112" fill="#94a08a" opacity=".18"/>
+  
+  <rect x="120" y="200" width="160" height="150" rx="26" fill="#94a08a"/>
+  <path d="M165 205 q35 -70 70 0" fill="none" stroke="#4c5a44" stroke-width="9" stroke-linecap="round"/>
+  <rect x="150" y="258" width="100" height="10" rx="5" fill="#4c5a44" opacity=".35"/>
+  <rect width="400" height="400" fill="url(#v)"/>
+</svg>

@@ -1,107 +1,227 @@
-# NEXORA AI LABS — Local AI Company OS (v0.2)
+# NEXORA AI LABS — Autonomous AI Software Studio
 
-A founder-controlled software-studio MVP powered by a local Ollama model. It includes an AI Executive Office, a directory of specialist AI roles, AI-generated project delegation, task approvals, specialist-written deliverables, and founder review.
+A founder-controlled software company that **builds and runs real web applications**.
+Give it a client requirement and it will produce an actual project workspace with
+frontend, backend, database, tests and documentation — then build it, test it, audit
+it and serve it in the browser from an isolated runtime.
 
-## What is implemented
+This is not a text generator. Every stage writes files to disk and every claim is
+backed by a command that actually ran.
 
-- FastAPI backend and dark web dashboard.
-- SQLite project/task persistence.
-- Local Ollama integration (default model: `llama3.2`).
-- AI CEO endpoint that converts a project brief into specialist tasks.
-- 9 specialist role prompts: Product, UX/UI, Frontend, Backend, QA/Security, DevOps, Growth, Support, and Operations.
-- Founder approval before a specialist task can run.
-- Specialist outputs are saved for founder review; the founder can accept or request a revision.
-- Existing SQLite databases are upgraded with `agent_id` and `result` task columns at startup.
+```
+Client requirement
+   │
+   ├─ 1. AI CEO .............. requirement analysis
+   ├─ 2. AI Product Manager .. technical specification
+   ├─ 3. AI UX/UI Designer ... design system + page structure
+   ├─ 4. AI Backend Engineer . API and data plan
+   ├─ 5. AI Database Engineer  schema implementation
+   ├─ 6. AI Backend Engineer . backend source files
+   ├─ 7. AI Frontend Engineer  frontend source files
+   ├─ 8. AI DevOps Engineer .. install, build, preview
+   ├─ 9. AI QA Engineer ...... automated test execution
+   ├─ 10. AI Security Engineer  static security audit
+   ├─ 11. Founder ............ review, approve, deploy decision
+```
 
-## Important capability boundary
+Founder approval gates sit in front of code generation, preview, repository work and
+deployment. Nothing is published automatically.
 
-This is a role-based multi-agent workflow prototype using one local LLM with different system prompts. It is not nine independent models or a fully autonomous company. It creates plans and text deliverables. It does **not** edit repositories, run generated code, access external accounts, contact customers, spend money, or deploy software. Keep those actions behind separate, explicit founder approval and security controls.
+---
 
-## Requirements
+## Quick start
 
-- Windows 10/11 (or another OS supported by Ollama)
-- Python 3.10+
-- Ollama installed and running
-- A model pulled locally, e.g. `llama3.2`
+Requirements: Python 3.11+, Node.js 22+ (Node 20.11 also works), and — for the AI
+stages — a local Ollama instance with a model pulled.
 
-## Windows setup
+```bash
+python -m venv .venv && source .venv/bin/activate     # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+cp .env.example .env                                  # Windows: Copy-Item .env.example .env
+uvicorn app.main:app --reload --port 8000
+```
 
-1. Install Ollama: <https://ollama.com/download/windows>
-2. In PowerShell, pull and test the model:
+Open <http://127.0.0.1:8000>. Node is required for the build/test/preview engine; the
+dashboard reports its availability.
 
-   ```powershell
-   ollama pull llama3.2
-   ollama run llama3.2
-   ```
+Optional AI (recommended — this is what makes the agents write code):
 
-   Type a test prompt, then `/bye` to exit.
+```bash
+ollama pull llama3.2
+ollama serve
+```
 
-3. Extract this ZIP and open PowerShell in the `nexora_ai_company` folder.
-4. Create your local environment file:
+If Ollama is unreachable the platform keeps working: planning falls back to the
+deterministic planner and every artefact is labelled `engine=blueprint`. The dashboard
+never shows fake AI progress.
 
-   ```powershell
-   Copy-Item .env.example .env
-   ```
+---
 
-5. Create and activate a virtual environment (recommended):
+## The acceptance test: Online Shopping Platform
 
-   ```powershell
-   python -m venv .venv
-   .\.venv\Scripts\Activate.ps1
-   ```
+Run it yourself, end to end:
 
-6. Install dependencies:
+```bash
+# 1. create the project and start the AI pipeline
+curl -X POST localhost:8000/api/projects -H 'content-type: application/json' \
+  -d '{"name":"Online Shopping Platform","description":"Real online shopping platform: registration, login, product listing, product details, cart, checkout, order management, admin dashboard, database integration.","autostart":true}'
 
-   ```powershell
-   python -m pip install -r requirements.txt
-   ```
+# 2. approve architecture, design and development plan (ids come from the approvals API)
+curl localhost:8000/api/projects/1/approvals
+curl -X POST localhost:8000/api/approvals/1/decide -H 'content-type: application/json' \
+  -d '{"decision":"approve","note":"Approved"}'
 
-7. Confirm `.env` contains:
+# 3. generate, build, test, audit and preview
+curl -X POST localhost:8000/api/projects/1/build
+```
 
-   ```dotenv
-   LLM_PROVIDER=ollama
-   OLLAMA_BASE_URL=http://127.0.0.1:11434
-   OLLAMA_MODEL=llama3.2
-   ```
+Or simply use the dashboard: **Projects → create → approve the three planning gates →
+Approve & generate code**. The workspace view then shows the working AI employee, the
+current phase, files being written, the build and test output, security status, the
+completion percentage and the live application.
 
-8. Start Nexora:
+What the generated application contains (all real, executable files):
 
-   ```powershell
-   uvicorn app.main:app --reload
-   ```
+| Area | What is generated |
+| --- | --- |
+| Frontend | ES-module SPA: hash router, home, shop, product detail, account, cart, checkout, orders, order detail, admin dashboard; componentised styles, skeletons, empty and error states, toasts |
+| Backend | Express 4 API: auth, catalogue, cart, orders, admin; middleware for sessions, CSRF, rate limiting, security headers, structured errors |
+| Database | SQLite schema with constraints and indexes, migration script, idempotent seed with 12 products and demo accounts |
+| Tests | 59 unit + integration tests executed with `node --test` against a real HTTP server and a real database |
+| Documentation | specification, design system, API reference, security review, deployment notes and founder review — generated from verified artefacts |
+| Operations | `.env.example`, `.gitignore`, GitHub Actions workflow, build and seed scripts |
 
-9. Open <http://127.0.0.1:8000>.
+Verification performed by the studio before it asks for approval:
 
-Keep Ollama running while using Nexora. If the dashboard says local AI unavailable, run `ollama list` and `ollama run llama3.2` to check the local service/model.
+```
+npm install            → dependencies installed
+npm run db:seed        → schema migrated, 12 products, demo accounts
+npm run build          → frontend bundle compiled
+npm test               → 59 passed, 0 failed
+static security scan   → 11/11 checks passed
+preview boot           → HTTP /api/health 200 {"product_count":12}
+```
 
-## Founder workflow
+---
 
-1. Create a project with a meaningful name and description.
-2. Select **AI CEO: Analyze & delegate**. The local model creates specialist tasks.
-3. Review each task and explicitly approve it.
-4. Select **Run AI specialist** to generate that role's deliverable.
-5. Read the output and select **Accept deliverable** or **Request revision**.
-6. Repeat until the project plan is complete.
+## Run the generated application
 
-The older deterministic `/api/projects/{id}/plan` endpoint remains available as a fallback.
+Every project lives in `generated_projects/<slug>/` as a normal, self-contained repo:
 
-## Main API routes
+```bash
+cd generated_projects/online-shopping-platform
+npm install
+npm run db:seed
+npm run build
+npm start          # http://localhost:3000
+```
 
-- `GET /api/health` — application and local model configuration status
-- `GET /api/agents` — specialist directory
-- `GET /api/projects`, `POST /api/projects` — projects
-- `POST /api/projects/{id}/ai-plan` — AI CEO creates a specialist plan
-- `POST /api/projects/{id}/plan` — deterministic fallback plan
-- `GET /api/tasks` — task board
-- `POST /api/tasks/{id}/approve` — founder authorizes specialist work
-- `POST /api/tasks/{id}/execute` — run the selected local specialist prompt
-- `POST /api/tasks/{id}/review` — accept or request revision
-- `POST /api/ai/chat` — founder chat with local AI
+Demo accounts: `demo@shop.test / Demo1234!` (customer) and
+`admin@shop.test / Admin1234!` (admin). Change them before any real deployment.
 
-## Data and security
+Inside the studio you do not need to leave the console — the **Open live app** button
+serves the running application through NEXORA's preview proxy at
+`/preview/<slug>/`.
 
-- Project and task data is stored in `nexora.db` in the working directory.
-- `.env` is local configuration and must not be committed to GitHub.
-- Never put API keys or passwords in project descriptions or chat prompts.
-- Back up `nexora.db` before making major changes.
-- Local model outputs can be wrong; review all outputs before using them.
+---
+
+## Architecture
+
+```
+app/
+  main.py             FastAPI surface: legacy MVP routes + platform routes
+  models.py           Project, Task, Workspace, WorkspaceEvent, Approval,
+                      BuildRun, ProjectFile, AgentRun
+  ai.py               Ollama client: generate_reply, schema-validated generate_json,
+                      live status probe
+  agent_contracts.py  JSON contract + validator for each AI employee
+  fallbacks.py        deterministic planners (labelled, never passed off as AI)
+  orchestrator.py     the 11-stage pipeline, approval gates, AI repair loop
+  personalizer.py     applies AI branding/design output to real source files
+  engine.py           install / build / test / seed / security scan / HTTP probes
+  sandbox.py          isolated process execution with an explicit allow-list
+  workspace.py        safe file IO inside generated_projects + secret scanning
+  preview.py          reverse proxy for the running generated application
+  codegen/blueprints/ the verified, fully tested application template
+```
+
+### Isolation model
+
+Generated code is never imported into the FastAPI process.
+
+* Commands run with `shell=False` through an executable allow-list
+  (`npm`, `node`, `npx`, `python3`, `git`) and are rejected if they contain shell
+  metacharacters or absolute paths.
+* Every working directory must resolve inside `generated_projects`.
+* Studio secrets are stripped from the child environment; generated apps receive an
+  explicitly scrubbed env plus `PORT`.
+* Hard timeouts with process-group kill, output caps (200 KB) and per-file (512 KB) and
+  per-workspace (600 files) write limits.
+* Previews run on random loopback ports and are only reachable through the proxy, which
+  validates the workspace, rewrites session cookies to the preview path and injects a
+  "generated application" banner.
+
+### AI contracts
+
+Each agent returns JSON matching a declared schema. `ai.generate_json` validates the
+payload, makes one repair attempt with the validator error, and raises on a second
+failure so the pipeline records a truthful error instead of inventing data. Every agent
+run is stored with its engine (`ai` / `blueprint`), model, status and validation error.
+
+When the AI produces source code it is written to disk and then **proven**: the studio
+rebuilds and re-runs the whole suite. A revision that breaks the build is reverted to the
+reviewed version and the revert is logged.
+
+---
+
+## API
+
+Platform:
+
+| Method | Route | Purpose |
+| --- | --- | --- |
+| `GET` | `/api/health` | Status, capabilities, installed blueprints |
+| `GET` | `/api/ai/status` | Live Ollama/model probe |
+| `POST` | `/api/projects` | Create a project (`autostart` runs the pipeline) |
+| `POST` | `/api/projects/{id}/generate` | Run analysis → approval gates |
+| `POST` | `/api/projects/{id}/build` | Implementation → build → test → security → preview |
+| `GET` | `/api/projects/{id}/dashboard` | Agents, phase, progress, events, builds, approvals |
+| `GET` | `/api/projects/{id}/files` · `/file` | File explorer and real source content |
+| `PUT` | `/api/projects/{id}/file` | Founder edit (indexed and audited) |
+| `GET` | `/api/projects/{id}/approvals` | Checkpoints and payloads |
+| `POST` | `/api/approvals/{id}/decide` | `approve` · `revision` · `reject` |
+| `POST` | `/api/projects/{id}/revision` | Apply a founder note and re-run the pipeline |
+| `POST` | `/api/projects/{id}/preview/start` · `/stop` | Control the isolated preview |
+| `GET` | `/api/projects/{id}/builds` | Raw build/test/security output |
+| `GET` | `/api/projects/{id}/repository/packet` | Git commands + what is excluded |
+| `ANY` | `/preview/{slug}/{path}` | Proxied live application |
+
+Legacy MVP surface (unchanged): `/api/agents`, `/api/projects/{id}/plan`,
+`/api/projects/{id}/ai-plan`, `/api/tasks`, `/api/tasks/{id}/approve|execute|review`,
+`/api/ai/chat`.
+
+---
+
+## Testing
+
+```bash
+pytest -q                                     # studio platform (41 tests)
+cd app/codegen/blueprints/shopping && npm test # generated application (59 tests)
+```
+
+`tests/test_pipeline_e2e.py` is the acceptance test: it runs the whole pipeline and then
+speaks HTTP to the generated server through a real port.
+
+---
+
+## Security notes
+
+* Never commit `.env`. The old example key in this repository's history was a real
+  Mistral key — treat it as compromised, rotate it, and prefer local Ollama for code
+  generation.
+* Generated applications are treated as untrusted code and are always executed in the
+  sandbox described above.
+* Repository preparation produces commands for you to run. NEXORA does not push to
+  GitHub, and publishing requires an approved deployment checkpoint first.
+* Local model output can be wrong. Review the founder checklist and the security report
+  before approving a deployment.

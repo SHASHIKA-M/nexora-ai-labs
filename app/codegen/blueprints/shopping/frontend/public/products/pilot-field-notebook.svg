@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Pilot Field Notebook">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#efe6dc"/><stop offset="1" stop-color="#c98b5e" stop-opacity=".35"/>
+    </linearGradient>
+    <radialGradient id="v" cx="50%" cy="42%" r="70%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".14"/><stop offset="1" stop-color="#000000" stop-opacity=".28"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#g)"/>
+  <circle cx="146" cy="139" r="112" fill="#c98b5e" opacity=".18"/>
+  
+  <rect x="110" y="215" width="180" height="24" rx="10" fill="#c98b5e"/>
+  <rect x="126" y="245" width="148" height="66" rx="12" fill="#7a4a26" opacity=".55"/>
+  <circle cx="175" cy="228" r="6" fill="#efe6dc"/><circle cx="205" cy="228" r="6" fill="#efe6dc"/>
+  <rect width="400" height="400" fill="url(#v)"/>
+</svg>

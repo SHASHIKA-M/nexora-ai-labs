@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Drift Running Cap">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e3e0d6"/><stop offset="1" stop-color="#94a08a" stop-opacity=".35"/>
+    </linearGradient>
+    <radialGradient id="v" cx="50%" cy="42%" r="70%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".14"/><stop offset="1" stop-color="#000000" stop-opacity=".28"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#g)"/>
+  <circle cx="150" cy="133" r="112" fill="#94a08a" opacity=".18"/>
+  
+  <path d="M 298.4 250.0 Q 298.4 250.0 289.8 284.1 Q 281.3 318.2 249.5 334.2 Q 217.7 350.2 181.9 346.7 Q 146.2 343.2 122.3 315.1 Q 98.4 287.0 105.0 252.4 Q 111.6 217.8 132.6 193.8 Q 153.6 169.7 186.7 154.0 Q 219.7 138.2 247.7 162.3 Q 275.8 186.4 287.1 218.2 Z" fill="#94a08a" opacity=".92"/>
+  <path d="M120 190 q80 -60 160 0 l-18 130 q-62 34 -124 0 Z" fill="#e3e0d6" opacity=".85"/>
+  <path d="M170 140 l30 24 l30 -24" fill="none" stroke="#4c5a44" stroke-width="3" opacity=".5"/>
+  <rect width="400" height="400" fill="url(#v)"/>
+</svg>

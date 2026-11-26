@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Aurora Linen Shirt">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#dfe4e8"/><stop offset="1" stop-color="#8d99a6" stop-opacity=".35"/>
+    </linearGradient>
+    <radialGradient id="v" cx="50%" cy="42%" r="70%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".14"/><stop offset="1" stop-color="#000000" stop-opacity=".28"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#g)"/>
+  <circle cx="160" cy="150" r="94" fill="#8d99a6" opacity=".18"/>
+  
+  <path d="M 295.8 250.0 Q 295.8 250.0 291.5 286.6 Q 287.1 323.1 253.3 341.5 Q 219.4 360.0 185.0 347.8 Q 150.6 335.6 126.0 310.7 Q 101.4 285.9 102.0 250.2 Q 102.5 214.5 124.1 185.1 Q 145.6 155.8 182.5 147.6 Q 219.5 139.4 246.0 164.3 Q 272.6 189.1 284.2 219.5 Z" fill="#8d99a6" opacity=".92"/>
+  <path d="M120 190 q80 -60 160 0 l-18 130 q-62 34 -124 0 Z" fill="#dfe4e8" opacity=".85"/>
+  <path d="M170 140 l30 24 l30 -24" fill="none" stroke="#3f4a55" stroke-width="3" opacity=".5"/>
+  <rect width="400" height="400" fill="url(#v)"/>
+</svg>

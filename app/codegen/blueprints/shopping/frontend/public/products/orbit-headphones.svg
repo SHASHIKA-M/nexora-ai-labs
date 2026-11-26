@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Orbit Headphones">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e9e2ea"/><stop offset="1" stop-color="#a89ab5" stop-opacity=".35"/>
+    </linearGradient>
+    <radialGradient id="v" cx="50%" cy="42%" r="70%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".14"/><stop offset="1" stop-color="#000000" stop-opacity=".28"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#g)"/>
+  <circle cx="147" cy="143" r="94" fill="#a89ab5" opacity=".18"/>
+  
+  <path d="M110 230 q0 -78 90 -78 q90 0 90 78" fill="#a89ab5"/>
+  <rect x="106" y="228" width="52" height="86" rx="24" fill="#584a63"/>
+  <rect x="242" y="228" width="52" height="86" rx="24" fill="#584a63"/>
+  <rect width="400" height="400" fill="url(#v)"/>
+</svg>

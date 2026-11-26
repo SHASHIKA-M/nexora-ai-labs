@@ -3,4 +3,19 @@
 __pycache__/
 *.py[cod]
 *.db
+*.db-wal
+*.db-shm
 .pytest_cache/
+.DS_Store
+
+# Generated client applications: real source trees produced at runtime.
+# They are build artefacts, not studio source. Keep them out of version control
+# (each project can be pushed to its own repository after founder approval).
+generated_projects/
+
+# Node dependency/build output inside blueprint templates.
+node_modules/
+package-lock.json
+
+# Compiled frontend bundle inside the blueprint template (produced by `npm run build`)
+app/codegen/blueprints/shopping/frontend/public/assets/

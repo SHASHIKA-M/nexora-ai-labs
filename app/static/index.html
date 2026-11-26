@@ -1,59 +1,129 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Nexora AI Labs | Company OS</title>
-<style>
-:root{color-scheme:dark;--bg:#0b1020;--panel:#121a2d;--line:#26334d;--muted:#9ba9c2;--accent:#8b9cff;--green:#66d9b2;--gold:#f4d28a;--red:#ff9a9a}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0,#1b2850 0,transparent 35%),var(--bg);color:#eef2ff;font:15px Inter,system-ui,sans-serif}
-main{max-width:1180px;margin:auto;padding:30px 20px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
-h1{font-size:30px;margin:0}.muted{color:var(--muted)}.pill{border:1px solid #335b53;color:var(--green);padding:7px 11px;border-radius:99px;font-size:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:22px 0}.agents{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:14px}
-.card{background:linear-gradient(145deg,#151f36,#101728);border:1px solid var(--line);border-radius:16px;padding:18px}.metric{font-size:28px;font-weight:700;margin-top:8px}.layout{display:grid;grid-template-columns:minmax(280px,.8fr) minmax(0,1.5fr);gap:16px}
-@media(max-width:760px){.layout{grid-template-columns:1fr}}input,textarea,select{width:100%;margin:7px 0 13px;padding:11px;border-radius:9px;border:1px solid var(--line);background:#0b1222;color:white;font:inherit}
-textarea{min-height:90px;resize:vertical}button{border:0;border-radius:9px;padding:10px 13px;background:var(--accent);color:#10162a;font-weight:700;cursor:pointer}button.secondary{background:#273650;color:#eef2ff}button.ghost{background:transparent;border:1px solid var(--line);color:#dce5ff}button.danger{background:#5a2934;color:#fff}button:disabled{opacity:.5;cursor:not-allowed}
-.item{border-top:1px solid var(--line);padding:13px 0}.item:first-child{border-top:0}.tag{font-size:11px;color:#c5d0e6;background:#26334d;padding:4px 7px;border-radius:7px;display:inline-block}.row{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.small{font-size:12px}.notice{color:var(--gold);font-size:12px;line-height:1.5}.agent{padding:12px;border:1px solid var(--line);border-radius:12px;background:#0d1528}.agent strong{display:block;margin-bottom:5px}.agent p{font-size:12px;line-height:1.45;color:var(--muted);margin:0}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.result{white-space:pre-wrap;overflow-wrap:anywhere;background:#0a1120;border:1px solid var(--line);padding:12px;border-radius:10px;margin-top:10px;max-height:420px;overflow:auto;color:#dce5ff}.status{font-size:11px;color:var(--gold)}
-</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEXORA AI LABS · Autonomous Software Studio</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230c0e12'/%3E%3Ctext x='32' y='45' font-family='Georgia' font-size='34' fill='%23d8b678' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/static/app.css">
 </head>
-<body><main>
-<div class="top"><div><div class="muted small">FOUNDER CONTROL CENTER</div><h1>NEXORA AI LABS</h1><div class="muted">Local-AI software studio · Founder-controlled Company OS</div></div><span class="pill">● Founder approval required</span></div>
-<div class="grid">
- <div class="card"><div class="muted">Projects</div><div class="metric" id="projectCount">0</div></div>
- <div class="card"><div class="muted">AI work items</div><div class="metric" id="taskCount">0</div></div>
- <div class="card"><div class="muted">Awaiting your review</div><div class="metric" id="approvalCount">0</div></div>
- <div class="card"><div class="muted">Local AI</div><div class="metric" style="font-size:19px" id="modelStatus">Checking…</div><div class="muted small" id="modelName"></div></div>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">N</span>
+      <div>
+        <strong>NEXORA</strong>
+        <small>AI Labs</small>
+      </div>
+    </div>
+
+    <nav class="side-nav" aria-label="Sections">
+      <button data-nav="projects" class="active">
+        <span class="nav-dot"></span> Projects
+      </button>
+      <button data-nav="workspace">
+        <span class="nav-dot"></span> Dev workspace
+      </button>
+      <button data-nav="approvals">
+        <span class="nav-dot"></span> Approvals <em id="pendingApprovals" hidden>0</em>
+      </button>
+      <button data-nav="agents">
+        <span class="nav-dot"></span> AI employees
+      </button>
+    </nav>
+
+    <div class="side-status">
+      <div class="status-line"><span>Local model</span><b id="modelState">…</b></div>
+      <div class="status-line"><span>Model</span><b id="modelName">—</b></div>
+      <div class="status-line"><span>Sandbox</span><b id="sandboxState">Node</b></div>
+    </div>
+    <p class="side-note">Everything here writes real files and runs real processes. Nothing is deployed without founder approval.</p>
+  </aside>
+
+  <main class="content">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Founder control center</p>
+        <h1 id="viewTitle">Projects</h1>
+      </div>
+      <div class="topbar-actions">
+        <span class="pill" id="pipelinePill">● Ready</span>
+        <button class="btn ghost" id="refreshBtn" title="Refresh">↻ Refresh</button>
+      </div>
+    </header>
+
+    <section class="view" id="view-projects">
+      <div class="split">
+        <div class="card">
+          <h2>New client project</h2>
+          <p class="muted small">Describe the application. NEXORA runs the AI company through analysis, specification, design, architecture, implementation, build, test, security, deployment preparation and founder review.</p>
+          <form id="projectForm">
+            <div class="field">
+              <label for="projectName">Project name</label>
+              <input id="projectName" required minlength="2" maxlength="160" placeholder="Online Shopping Platform">
+            </div>
+            <div class="field">
+              <label for="projectDescription">Client requirement</label>
+              <textarea id="projectDescription" rows="6" maxlength="8000" placeholder="Build a real online shopping platform with registration, product listing, cart, checkout, order management and an admin dashboard."></textarea>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="projectBlueprint">Application blueprint</label>
+                <select id="projectBlueprint">
+                  <option value="">Auto-detect from the requirement</option>
+                  <option value="shopping">Online Shopping Platform</option>
+                  <option value="crud">Task Management Application</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="projectBusiness">Business line</label>
+                <select id="projectBusiness">
+                  <option value="both">Client + own products</option>
+                  <option value="client">Client project</option>
+                  <option value="own">Our own product</option>
+                </select>
+              </div>
+            </div>
+            <label class="checkbox"><input type="checkbox" id="projectAutostart" checked> Start the AI pipeline immediately</label>
+            <button class="btn" type="submit" id="createBtn">Create project &amp; start AI</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="row-between">
+            <h2>Projects</h2>
+            <button class="btn ghost small" id="loadProjects">Reload</button>
+          </div>
+          <div id="projectList" class="list"><p class="muted small">Loading…</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-workspace" hidden>
+      <div id="workspaceRoot"><div class="empty-state"><h2>No project selected</h2><p>Create a project, then open its development workspace.</p></div></div>
+    </section>
+
+    <section class="view" id="view-approvals" hidden>
+      <div id="approvalRoot"></div>
+    </section>
+
+    <section class="view" id="view-agents" hidden>
+      <div class="agents-grid" id="agentGrid"></div>
+      <div class="card" style="margin-top:18px">
+        <h2>Ask the AI CEO</h2>
+        <p class="muted small">Free-form conversation with the configured local Ollama model.</p>
+        <form id="chatForm" class="chat-form">
+          <textarea id="chatInput" rows="3" maxlength="6000" placeholder="Ask the AI CEO to analyse a business or software idea…"></textarea>
+          <button class="btn" type="submit" id="chatBtn">Send</button>
+        </form>
+        <pre id="chatOutput" class="code-block" hidden></pre>
+      </div>
+    </section>
+  </main>
 </div>
-<div class="layout">
-<section class="card"><h2>Create a project</h2><form id="projectForm">
-<label>Project name</label><input id="name" required minlength="2" placeholder="e.g. Client booking platform">
-<label>Description</label><textarea id="description" placeholder="What should this web app do?"></textarea>
-<label>Business line</label><select id="business"><option value="both">Client projects + own products</option><option value="client">Client project</option><option value="own">Our own product</option></select>
-<button type="submit">Create project</button></form><p class="notice">Creating a project stores it locally. The AI CEO can create a department plan. Every specialist task requires your approval before it runs.</p></section>
-<section class="card"><div class="row"><h2>Projects</h2><button class="secondary" onclick="load()">Refresh</button></div><div id="projects" class="muted">Loading…</div></section>
-</div>
-<section class="card" style="margin-top:16px"><div class="row"><div><h2 style="margin-bottom:4px">AI Executive Office & Departments</h2><div class="muted small">One local model acting through distinct specialist roles and prompts.</div></div><span class="tag">10 defined roles</span></div><div class="agents" id="agents">Loading AI departments…</div></section>
-<section class="card" style="margin-top:16px"><h2>Ask Nexora AI</h2><p class="muted small">Founder-facing assistant powered by your local Ollama model.</p><form id="chatForm"><textarea id="chatMessage" required minlength="2" maxlength="6000" placeholder="Ask the AI CEO to analyze a business or software idea…"></textarea><button type="submit" id="chatButton">Send to AI CEO</button></form><pre id="chatReply" class="result" hidden></pre></section>
-<section class="card" style="margin-top:16px"><div class="row"><div><h2>Department task board</h2><div class="muted small">Approve → AI specialist prepares a deliverable → Founder reviews and accepts or requests revision.</div></div><button class="secondary" onclick="load()">Refresh board</button></div><div id="tasks" style="margin-top:12px">Loading…</div></section>
-<p class="muted small" style="margin-top:20px">Current capability: AI-generated planning and text deliverables. This MVP does not autonomously edit your repository, run generated code, contact customers, spend money, access external accounts, or deploy. Keep human review for important decisions.</p>
-</main>
-<script>
-async function api(path,opts={}){const r=await fetch(path,{headers:{'Content-Type':'application/json'},...opts});let data={};try{data=await r.json()}catch{}if(!r.ok)throw new Error(data.detail||'Request failed');return data}
-function el(tag,cls,text){const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node}
-async function health(){try{const h=await api('/api/health');document.getElementById('modelStatus').textContent=h.ollama==='online'?'Connected':'Offline';document.getElementById('modelName').textContent=h.model+' · '+h.provider}catch{document.getElementById('modelStatus').textContent='Unavailable';document.getElementById('modelName').textContent='Start Ollama to connect'}}
-async function loadAgents(){const agents=await api('/api/agents');const root=document.getElementById('agents');root.innerHTML='';agents.forEach(a=>{const box=el('div','agent');box.append(el('strong','',a.name),el('div','muted small',a.department),el('p','',a.mission));root.append(box)})}
-async function load(){const [projects,tasks]=await Promise.all([api('/api/projects'),api('/api/tasks')]);document.getElementById('projectCount').textContent=projects.length;document.getElementById('taskCount').textContent=tasks.length;document.getElementById('approvalCount').textContent=tasks.filter(t=>t.status==='awaiting_founder_review').length;
- const p=document.getElementById('projects');p.innerHTML='';if(!projects.length)p.textContent='No projects yet. Create your first project.';
- projects.forEach(x=>{const box=el('div','item');const title=el('strong','',x.name);const desc=el('div','muted small',x.description||'No description');const status=el('span','tag',x.status);const btn=el('button','secondary','AI CEO: Analyze & delegate');btn.onclick=()=>aiPlan(x.id,btn);box.append(title,desc,status,el('div','actions'));box.lastChild.append(btn);p.append(box)});
- const root=document.getElementById('tasks');root.innerHTML='';if(!tasks.length){root.textContent='No tasks yet. Create a project and ask the AI CEO to delegate.';return}
- tasks.forEach(t=>{const box=el('div','item');const row=el('div','row');const left=el('div');left.append(el('strong','',t.title),el('div','muted small',t.department+' · '+t.agent_role),el('div','muted small','Project #'+t.project_id+' · '+t.details));row.append(left,el('span','tag',t.status));box.append(row);
- const actions=el('div','actions');if(t.status==='awaiting_founder_approval'){const b=el('button','','Approve specialist task');b.onclick=()=>approveTask(t.id,b);actions.append(b)}else if(t.status==='approved_for_execution'){const b=el('button','','Run AI specialist');b.onclick=()=>executeTask(t.id,b);actions.append(b)}else if(t.status==='awaiting_founder_review'){const accept=el('button','','Accept deliverable');accept.onclick=()=>reviewTask(t.id,'accept',accept);const revise=el('button','secondary','Request revision');revise.onclick=()=>reviewTask(t.id,'revise',revise);actions.append(accept,revise)}
- if(actions.childNodes.length)box.append(actions);if(t.result){const result=el('pre','result',t.result);box.append(result)}root.append(box)});
-}
-async function aiPlan(id,btn){try{btn.disabled=true;btn.textContent='AI CEO planning…';await api(`/api/projects/${id}/ai-plan`,{method:'POST'});await load()}catch(e){alert(e.message)}finally{btn.disabled=false;btn.textContent='AI CEO: Analyze & delegate'}}
-async function approveTask(id,btn){try{btn.disabled=true;await api(`/api/tasks/${id}/approve`,{method:'POST'});await load()}catch(e){alert(e.message);btn.disabled=false}}
-async function executeTask(id,btn){try{btn.disabled=true;btn.textContent='Specialist working…';await api(`/api/tasks/${id}/execute`,{method:'POST'});await load()}catch(e){alert(e.message);btn.disabled=false;btn.textContent='Run AI specialist'}}
-async function reviewTask(id,decision,btn){try{btn.disabled=true;await api(`/api/tasks/${id}/review`,{method:'POST',body:JSON.stringify({decision})});await load()}catch(e){alert(e.message);btn.disabled=false}}
-document.getElementById('chatForm').addEventListener('submit',async e=>{e.preventDefault();const btn=document.getElementById('chatButton'),out=document.getElementById('chatReply');btn.disabled=true;out.hidden=false;out.textContent='Thinking with local AI…';try{const r=await api('/api/ai/chat',{method:'POST',body:JSON.stringify({message:document.getElementById('chatMessage').value})});out.textContent='Provider: '+r.provider+'\n\n'+r.reply}catch(err){out.textContent=err.message}finally{btn.disabled=false}});
-document.getElementById('projectForm').addEventListener('submit',async e=>{e.preventDefault();try{await api('/api/projects',{method:'POST',body:JSON.stringify({name:document.getElementById('name').value,description:document.getElementById('description').value,business_line:document.getElementById('business').value})});e.target.reset();await load()}catch(err){alert(err.message)}});
-Promise.all([health(),loadAgents(),load()]).catch(e=>alert(e.message));
-</script></body></html>
+
+<div class="toast-stack" id="toastStack" aria-live="polite"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

@@ -20,6 +20,17 @@ def test_ai_status_never_raises_when_ollama_is_down(client):
     assert body["provider"] == "ollama"
 
 
+def test_pipeline_definition_lists_every_stage(client):
+    body = client.get("/api/pipeline").json()
+    assert len(body["steps"]) >= 11
+    assert {step["phase"] for step in body["steps"]} >= {
+        "analysis", "specification", "design", "api_design", "implementation",
+        "build", "testing", "security", "deployment_prep", "founder_review",
+    }
+    assert set(body["approvals"]) == {"architecture", "design", "development_plan",
+                                      "application", "deployment"}
+
+
 def test_original_surface_is_preserved(client, project):
     assert client.get("/api/agents").status_code == 200
     assert isinstance(client.get("/api/projects").json(), list)

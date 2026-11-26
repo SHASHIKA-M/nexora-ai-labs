@@ -139,7 +139,7 @@ def list_agents():
 @app.get("/api/pipeline")
 def pipeline_definition():
     return {
-        "steps": orchestrator.PIPELINE_STEPS if hasattr(orchestrator, "PIPELINE_STEPS") else [],
+        "steps": orchestrator.PIPELINE,
         "approvals": orchestrator.APPROVAL_GATES,
         "labels": PHASE_LABELS,
     }
